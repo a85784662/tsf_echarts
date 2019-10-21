@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>土石方数据展示</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+  <div class="content-wrap">
+    <div class="content-item1" id="main1"></div>
+    <div class="content-item2" id="main2"></div>
+    <div class="content-item2" id="main3"></div>
+  </div>
+  <div class="content-wrap">
+    <div class="content-item1" id="main4"></div>
+    <div class="content-item5" id="main5"></div>
+    <div class="content-item5" id="main6"></div>
+  </div>
+  <div class="content-wrap">
+    <div class="content-item3" id="main7"></div>
+    <div class="content-item3" id="main8"></div>
+    <!-- <div class="content-item4" id="main9"></div> -->
+    <div class="content-item4-wrap l-clear">
+      <div class="content-item4" id="main10"></div>
+      <p>总工期</p>
+    </div>
+  </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script src="js/page.js"></script>
+<script type="text/javascript">
+var op1_plan =  [0, 3773, 7546, 11319, 15092, 18865, 22638, 26411, 30184, 33957, 37730, 41503, 45276, 49049, 52822]
+      var op1_real = [576, 576, 576, 57600, 576, 576, 576, 576, 1500, 15000, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
+      var op1_x = ['星期一','星期二','星期三','星期四','星期五','星期一','星期二','星期三','星期四','星期五','星期一','星期二','星期三','星期四','星期五']
+      option1 = {
+        title: {
+          text: '累计出土方量计划值与实际值对比',
+          textStyle: {
+            fontSize: 12
+          }
+
+        },
+        dataZoom: {
+          realtime: true, //拖动滚动条时是否动态的更新图表数据
+          height: 10,//滚动条高度
+          start: 100,//滚动条开始位置（共100等份）
+          end: 50//结束位置（共100等份）
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          x: 'right',
+          y: 'top',
+          data: ['实际累计出土方量', '计划累计出土方量']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: op1_x
+          }
+        ],
+        yAxis: [
+          {
+            name: '累计出土方量',
+            type: 'value',
+            minInterval: 1
+          }
+        ],
+        series: [
+          {
+            name: '实际累计出土方量',
+            type: 'line',
+            areaStyle: {
+              color: 'rgb(247,8,94)',
+            },
+            data: op1_real,
+            markPoint: {
+              data: [
+                {
+                  name: '最近一天',
+                  coord: [op1_x[op1_x.length - 1], op1_real[op1_real.length - 1]],
+                  value: op1_real[op1_real.length - 1],
+                  itemStyle: {
+                    normal: { color: 'rgba(247,8,94,1)' }
+                  }
+                }
+              ]
+            },
+          },
+          {
+            name: '计划累计出土方量',
+            type: 'line',
+            areaStyle: {
+              color: 'rgba(3,117,207,1)',
+            },
+            data: op1_plan,
+            markPoint: {
+              data: [
+                {
+                  name: '最近一天',
+                  coord: [op1_x[op1_x.length - 1], op1_plan[op1_plan.length - 1]],
+                  value: op1_plan[op1_plan.length - 1],
+                  itemStyle: {
+                    normal: { color: 'rgb(3,117,207)' }
+                  }
+                }
+              ]
+            },
+          }
+
+        ]
+      };
+
+      var myChart1 = echarts.init(document.getElementById('main1'));
+      myChart1.setOption(option1);
+
+
+  //累计出土饼图一
+
+var op2_left_plan = 249154
+      var op2_left_real = 530046
+      var op2_plan = 384846
+      var op2_real = 103954
+
+      var placeHolderStyle = {
+        normal: {
+          label: {
+            show: false,
+          },
+          labelLine: {
+            show: false,
+          }
+        }
+      };
+      option2 = {
+        tooltip: {
+          show: true,
+          trigger: 'item',//提示框触发类型，item数据项图形触发，主要应用于无类目轴的图表（散点图、饼形图等）
+          formatter: function (params, ticket, callback) {//第一个参数数据集、第二个参数是异步回调标志、第三个参数是异步回调
+            return params.seriesName + ": " + params.value;//系列名称：数据值
+          }
+        },
+        color: ['#e20a58', '#066dbe'],//调色盘颜色列表，默认情况下图例和饼形环图颜色使用
+        legend: {
+          top: "55px",
+          left: "50%",
+          itemHeight: 15,//图例的高度
+
+          itemGap: 12,//图例之间的间距        
+
+          data: ['实际累计出土方量', '计划累计出土方量'],//图例的数据数组
+          textStyle: {
+            color: '#666'
+          },
+          selectedMode: true,//图例选择模式
+          orient: "vertical"//图例布局方式
+        },
+        series: [
+          {
+            name: '实际累计出土方量',
+            type: 'pie',
+            clockWise: false, //顺时加载
+            hoverAnimation: false, //鼠标移入变大
+            radius: ['40%', '55%'],
+            itemStyle: placeHolderStyle,
+            label: {
+              normal: {
+                show: false,
+              }
+            },
+            data: [{
+              value: op2_real,
+              itemStyle: {
+                normal: {
+                  color: '#e20a58'
+                }
+              }
+            },
+            {
+              value: op2_left_real,
+              itemStyle: {
+                normal: {
+                  color: 'transparent'
+                }
+              }
+            }]
+          },
+          {
+            name: '计划累计出土方量',
+            type: 'pie',
+            clockWise: false, //顺时加载
+            hoverAnimation: false, //鼠标移入变大
+            radius: ["20%", '35%'],
+            itemStyle: placeHolderStyle,
+            data: [{
+              value: op2_plan,
+              itemStyle: {
+                normal: {
+                  color: '#066dbe'
+                }
+              }
+            },
+            {
+              value: op2_left_plan,
+              itemStyle: {
+                normal: {
+                  color: 'transparent'
+                }
+              }
+            }]
+          }
+        ]
+      };
+      var myChart2 = echarts.init(document.getElementById('main2'));
+      myChart2.setOption(option2);
+
+
+  //累计出土饼图二
+var op3_daysrate = parseInt(60.71428571428571)
+      var op3_left_daysrate = parseInt(39.28571428571429)
+
+      var op3_rate = parseInt(16.39652996845426)
+      var op3_left_rate = parseInt(39.28571428571429);
+
+      var placeHolderStyle = {
+        normal: {
+          label: {
+            show: false,
+          },
+          labelLine: {
+            show: false,
+          }
+        }
+      };
+      option3 = {
+        tooltip: {
+          show: true,
+          trigger: 'item',//提示框触发类型，item数据项图形触发，主要应用于无类目轴的图表（散点图、饼形图等）
+          formatter: function (params, ticket, callback) {//第一个参数数据集、第二个参数是异步回调标志、第三个参数是异步回调
+            return params.seriesName + ": " + params.value + "%";//系列名称：数据值
+          }
+        },
+        color: ['#e20a58', '#3dcdbf'],//调色盘颜色列表，默认情况下图例和饼形环图颜色使用
+        legend: {
+          top: "55px",
+          left: "50%",
+          itemHeight: 15,//图例的高度
+
+          itemGap: 12,//图例之间的间距        
+
+          data: ['实际累计出土方量占比', '已用工期占比'],//图例的数据数组
+          textStyle: {
+            color: '#666'
+          },
+          selectedMode: true,//图例选择模式
+          orient: "vertical"//图例布局方式
+        },
+        series: [
+          {
+            name: '实际累计出土方量占比',
+            type: 'pie',
+            clockWise: false, //顺时加载
+            hoverAnimation: false, //鼠标移入变大
+            radius: ['40%', '55%'],
+            itemStyle: placeHolderStyle,
+            label: {
+              normal: {
+                show: false,
+              }
+            },
+            data: [{
+              value: op3_rate,
+              itemStyle: {
+                normal: {
+                  color: '#e20a58'
+                }
+              }
+            },
+            {
+              value: op3_left_rate,
+              itemStyle: {
+                normal: {
+                  color: 'transparent'
+                }
+              }
+            }]
+          },
+          {
+            name: '已用工期占比',
+            type: 'pie',
+            clockWise: false, //顺时加载
+            hoverAnimation: false, //鼠标移入变大
+            radius: ["20%", '35%'],
+            itemStyle: placeHolderStyle,
+            data: [{
+              value: op3_daysrate,
+              itemStyle: {
+                normal: {
+                  color: '#3dcdbf'
+                }
+              }
+            },
+            {
+              value: op3_left_daysrate,
+              itemStyle: {
+                normal: {
+                  color: 'transparent'
+                }
+              }
+            }]
+          }
+        ]
+      };
+      var myChart3 = echarts.init(document.getElementById('main3'));
+      myChart3.setOption(option3);
+
+
+  //第二列开始
+      var op4_advice = [0, 3770, 3792, 3815, 3838, 38, 3886]
+      var op4_plan = [2773, 3773, 373, 3223, 3773, 3773, 3773]
+      var op4_real = [576, 0, 0, 0, 0, 0, 0]
+      var op4_x = ["2019-07-10", "2019-07-11", "2019-07-12", "2019-07-13", "2019-07-14", "2019-07-15", "2019-07-16"]
+
+      option4 = {
+        title: {
+          text: '每日出土方量计划值与实际值对比',
+          textStyle: {
+            fontSize: 14
+          }
+
+        },
+        dataZoom: {
+          realtime: true, //拖动滚动条时是否动态的更新图表数据
+          height: 10,//滚动条高度
+          start: 100,//滚动条开始位置（共100等份）
+          end: 70//结束位置（共100等份）
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          x: 'right',
+          y: 'top',
+          data: ['每日实际出土量', '每日计划平均出土方量', '每日建议出土方量']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: op4_x
+          }
+        ],
+        yAxis: [
+          {
+            name: '每日出土方量',
+            type: 'value',
+            minInterval: 1
+          }
+        ],
+        series: [
+          {
+            name: '每日实际出土量',
+            type: 'line',
+            areaStyle: {
+              color: 'rgb(247,8,94)'
+            },
+            data: op4_real,
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值' }
+              ]
+            },
+          },
+          {
+            name: '每日计划平均出土方量',
+            type: 'line',
+            areaStyle: {
+              color: 'rgba(3,117,207,1)'
+            },
+            data: op4_plan,
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值' }
+              ]
+            }
+          },
+          {
+            name: '每日建议出土方量',
+            type: 'line',
+            areaStyle: {
+              color: 'rgba(179,179,179,1)'
+            },
+            data: op4_advice,
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值' }
+              ]
+            }
+          }
+
+        ]
+      };
+      var myChart4 = echarts.init(document.getElementById('main4'));
+      myChart4.setOption(option4);
+  //累计出土饼图一
+var op5_out = 103954
+      var op5_remain = 540018
+
+      option5 = option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: 'vertical',
+          x: 'right',
+          y: 'top',
+          data: ['实际累计出土方量', '实际剩余出土方量']
+        },
+        series: [
+          {
+            name: '出土方量',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            label: {
+              formatter: '{d}%'
+            },
+            data: [
+              { value: op5_out, name: '实际累计出土方量', itemStyle: { color: '#f7085e' } },
+              { value: op5_remain, name: '实际剩余出土方量', itemStyle: { color: '#0375cf' } },
+            ],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      var myChart5 = echarts.init(document.getElementById('main5'));
+      myChart5.setOption(option5);
+
+  //累计出土饼图二
+  var op6_days = 168
+      var op6_days_gone = 102
+
+      option6 = {
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: 'vertical',
+          x: 'right',
+          y: 'top',
+          data: ['已用工期', '土石方总工期'],
+        },
+        series: [
+          {
+            name: '工期',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            label: {
+              formatter: '{d}%'
+            },
+            data: [
+              { value: op6_days_gone, name: '已用工期', itemStyle: { color: '#3dcdbf' } },
+              { value: op6_days, name: '土石方总工期', itemStyle: { color: '#066dbe' } }
+            ],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };;
+      var myChart6 = echarts.init(document.getElementById('main6'));
+      myChart6.setOption(option6);
+
+
+  //第三列展示开始
+var op7_x = ["Sun", "Sat", "Fri", "Thu", "Wed", "Tue", "Mon"]
+      var op7_y = [0, 6336, 3636, 846, 126, 2358, 0]
+      var op7_y_1 = [0, 2034, 2538, 0, 0, 0, 0]
+      var op7_x_arr = [];
+      var op7_y_arr = [];
+      var op7_y_1_arr = [];
+
+      for (var i = 0; i < op7_x.length; i++) {
+        var xxc = op7_x[i]
+        op7_x_arr.unshift(xxc)
+      }
+      op7_x_arr = transformChinaDate(op7_x_arr);
+
+      for (var i = 0; i < op7_y.length; i++) {
+        var xxc = op7_y[i];
+        op7_y_arr.unshift(xxc)
+      }
+
+      for (var i = 0; i < op7_y_1.length; i++) {
+        var xxc = op7_y_1[i];
+        op7_y_1_arr.unshift(xxc)
+      }
+
+      option7 = {
+        title: {
+          text: '每周实际出土方量对比',
+          textStyle: {
+            fontSize: 14
+          }
+        },
+        color: ['#003366', '#006699'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['本周', '上周'],
+          x: "right",
+          y: "top"
+        },
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center'
+        },
+        calculable: true,
+        xAxis: [
+          {
+            type: 'category',
+            axisTick: { show: false },
+            data: op7_x_arr,
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#d8d8d8',
+                width: 1
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            minInterval: 1
+          }
+        ],
+        series: [
+          {
+            name: '本周',
+            type: 'bar',
+            barGap: 0,
+            data: op7_y_arr,
+            color: '#066dbe',
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值', itemStyle: { color: '#066dbe' } }
+              ]
+            },
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true, //开启显示
+                  position: 'top', //在上方显示
+                  textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 12
+                  }
+                }
+              }
+            }
+          },
+          {
+            name: '上周',
+            type: 'bar',
+            data: op7_y_1_arr,
+            color: '#e20a58',
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值', itemStyle: { color: '#e20a58' } }
+              ]
+            },
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true, //开启显示
+                  position: 'top', //在上方显示
+                  textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 12
+                  }
+                }
+              }
+            }
+          }
+        ]
+      };
+
+      var myChart7 = echarts.init(document.getElementById('main7'));
+      myChart7.setOption(option7);
+
+ var op8_x = ["Sun", "Sat", "Fri", "Thu", "Wed", "Tue", "Mon"]
+      var op8_y = [0, 6336, 3636, 846, 126, 2358, 0]
+      var op8_y_1 = [0, 2034, 2538, 0, 0, 0, 0]
+      var op8_x_arr = [];
+      var op8_y_arr = [];
+      var op8_y_1_arr = [];
+
+      for (var i = 0; i < op8_x.length; i++) {
+        var xxc = op8_x[i]
+        op8_x_arr.unshift(xxc)
+      }
+
+      op8_x_arr = transformChinaDate(op8_x_arr);
+
+      for (var i = 0; i < op8_y.length; i++) {
+        var xxc = op8_y[i];
+        op8_y_arr.unshift(xxc)
+      }
+
+      for (var i = 0; i < op8_y_1.length; i++) {
+        var xxc = op8_y_1[i];
+        op8_y_1_arr.unshift(xxc)
+      }
+
+
+      option8 = {
+        title: {
+          text: '每周实际出土方量对比',
+          textStyle: {
+            fontSize: 14
+          }
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['本周出土方量','上周出土方量'],
+          x: 'right',
+          y: 'top'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: op8_x_arr
+        },
+        yAxis: {
+          name: '实际出土方量(m³)',
+          type: 'value',
+          minInterval: 1
+        },
+        series: [
+          {
+            name: '本周出土方量',
+            type: 'line',
+            data: op8_y_arr,
+            color: '#e20a58',
+            itemStyle: { normal: { label: { show: true,position:'top' } } }
+          },
+          {
+            name: '上周出土方量',
+            type: 'line',
+            data: op8_y_1_arr,
+            color: '#066dbe',
+            itemStyle: { normal: { label: { show: true } } }
+          }
+        ]
+      };
+
+      var myChart8 = echarts.init(document.getElementById('main8'));
+      myChart8.setOption(option8);
+
+
+
+  //仪表板
+
+var op10_total = 750
+      var op10_days_gone = 102
+      var op10_rate = 13.600000000000001
+
+
+      option10 = {
+        tooltip: {
+          formatter: "{a} <br/>{b} : {c}天"
+        },
+        series: [
+          {
+            name: '完成率' + parseInt(op10_rate) + '%',
+            type: 'gauge',
+            min: 1,
+            max: op10_total,
+            detail: { formatter: '{value}天' },
+            axisLine: {            // 坐标轴线
+              lineStyle: {       // 属性lineStyle控制线条样式
+                color: [[op10_rate/100, '#3dcdbf'], [4, '#e20a58']],
+                width: 6,
+                //shadowColor : '#fff', //默认透明
+                //shadowBlur: 10
+              }
+            },
+            axisLabel: {            // 坐标轴小标记
+              distance: 8,
+              fontSize: 12,
+              formatter: function (v) {
+                return v.toFixed(0);
+              },
+            },
+            axisTick: {            // 坐标轴小标记
+              length: 15,        // 属性length控制线长
+              lineStyle: {       // 属性lineStyle控制线条样式
+                color: 'auto',
+              }
+            },
+            /* splitLine: {           // 分隔线
+              length: 25,         // 属性length控制线长
+              lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                width: 3,
+                color: '#fff',
+              }
+            }, */
+            pointer: {           // 分隔线
+              //shadowColor : '#fff', //默认透明
+              //shadowBlur: 5
+            },
+            title: {
+              offsetCenter: ['0', '-115'],
+              textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                fontWeight: 'bolder',
+                fontSize: 14,
+                //fontStyle: 'italic',
+                color: '#666',
+              }
+            },
+            detail: {
+              textStyle: {
+                fontSize: 20,
+                color: '#1e90ff'
+              },
+              //offsetCenter: offsetConfig,
+              formatter: function () {
+                return parseInt(op10_rate) + '%';
+              }
+            },
+            data: [{ value: op10_days_gone, name: '已用工期' }]
+          }
+        ]
+      };
+      var myChart10 = echarts.init(document.getElementById('main10'));
+      myChart10.setOption(option10);
+
+</script>
+
+</html>
